@@ -41,6 +41,24 @@ button, #target {
 	margin: 0 auto;
 }
 
+#fanningTarget {
+	background: white;
+	clear: both;
+	border: 1px solid black;
+	width: 590px;
+	margin: 20px auto;
+	padding: 20px 20px;
+	text-align: left;
+}
+
+#fanningTarget svg {
+	width: 75px;
+	height: 75px;
+	border: 1px solid #EEE;
+	margin-right: 3px;
+	margin-bottom: 3px;
+}
+
 .char-form {
 	margin: 0 0 20px;
 }
@@ -56,6 +74,12 @@ button, #target {
 	font-size: 16px;
 	padding: 5px;
 	width: 33px;
+	text-align: center;
+}
+
+.other-input {
+	font-size: 16px;
+	padding: 5px;
 	text-align: center;
 }
 

@@ -9,13 +9,16 @@ function printStrokePoints(data) {
 
 function updateCharacter() {
 	document.querySelector('#target').innerHTML = '';
+	document.querySelector('#fanningTarget').innerHTML = '';
 
 	var character = document.querySelector('.js-char').value;
+	var strokeDelay = document.querySelector('.js-strokeDelay').value;
+	
 	window.location.hash = character;
 	writer = HanziWriter.create('target', character, {
 		width: 400,
 		height: 400,
-		radicalColor: '#166E16',
+		delayBetweenStrokes: strokeDelay,
 		onCorrectStroke: printStrokePoints,
 		onMistake: printStrokePoints,
 		showCharacter: false,
@@ -23,6 +26,34 @@ function updateCharacter() {
 	isCharVisible = true;
 	isOutlineVisible = true;
 	window.writer = writer;
+	writer.animateCharacter();
+		
+	HanziWriter.loadCharacterData(character).then(function(charData) {
+	  var target = document.getElementById('fanningTarget');
+	  for (var i = 0; i < charData.strokes.length; i++) {
+	    var strokesPortion = charData.strokes.slice(0, i + 1);
+	    renderFanningStrokes(target, strokesPortion);
+	  }
+	});
+}
+
+function renderFanningStrokes(target, strokes) {
+  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  target.appendChild(svg);
+  var group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+  // set the transform property on the g element so the character renders at 75x75
+  var transformData = HanziWriter.getScalingTransform(75, 75);
+  group.setAttributeNS(null, 'transform', transformData.transform);
+  svg.appendChild(group);
+
+  strokes.forEach(function(strokePath) {
+    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttributeNS(null, 'd', strokePath);
+    // style the character paths
+    path.style.fill = '#555';
+    group.appendChild(path);
+  });
 }
 
 window.onload = function() {
